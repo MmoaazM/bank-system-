@@ -24,4 +24,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="users_data.txt" />
+  </ItemGroup>
 </Project>
