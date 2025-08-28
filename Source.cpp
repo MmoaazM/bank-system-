@@ -7,5 +7,6 @@ int main()
 	vector<stUserData>all_users;
 	users_informations::ReadDataFromFile(all_users);
 
+	show::mainmenu();
 	return 0;
 }
