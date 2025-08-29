@@ -126,6 +126,7 @@
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="header2.h" />
     <ClInclude Include="Header.h" />
   </ItemGroup>
   <ItemGroup>

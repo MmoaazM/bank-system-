@@ -1,23 +1,6 @@
 #pragma once
-#include<iostream>
-#include<string>
-#include<vector>
-#include<fstream>
-#include<iomanip>
+#include"header2.h"
 
-using namespace std;
-
-enum userchoice { showClientsList = 1,addNewClient,deleteClient,upgradeClientInfo,findClient,Exit };
-
-
-struct stUserData
-{
-	string name;
-	string id;
-	string pincode;
-	string phone;
-	int balance;
-};
 
 namespace validation
 {
@@ -36,18 +19,22 @@ namespace validation
 		string answer;  bool ThereIsDigit = 0;
 		do 
 		{
-			cin >> answer;
+			
+			getline(cin, answer);
 
 			for (char& letter : answer)
 			{
-				if (isdigit(letter))
+				if (isdigit(letter)||isspace(letter)||ispunct(letter))
 				{
 					cout << "Wrong input , please write you answer correctly : ";
 					ThereIsDigit = 1;
 					break;
 				}
 			}
-			if (ThereIsDigit) continue;
+			if (ThereIsDigit) 
+			{
+				ThereIsDigit = 0; continue;
+			}
 
 			answer = validation::LowerTheWord(answer);
 			if (answer != "yes" && answer != "no")
@@ -65,26 +52,6 @@ namespace validation
 	}
 }
 
-namespace handle_clients
-{
-
-	short find_client(string id, vector<stUserData>& usersvec)
-	{
-		for (int i = 0; i < usersvec.size();i++)
-		{
-			if (usersvec[i].id == id)
-			{
-				return i;
-			}
-		}
-		return -1;
-	}
-
-
-
-
-
-}
 
 
 namespace users_information
@@ -176,81 +143,9 @@ namespace users_information
 	vector<stUserData> DeleteUser(vector<stUserData>& users)
 	{
 		string UserId; short index = 0; vector<stUserData>UsersAfterDelete; string again;
-
-	short find_client(string id,vector<stUserData>& usersvec)
-	{
-		for (int i=0; i < usersvec.size();i++)
-		{
-			if (usersvec[i].id == id)
-			{
-				return i;
-			}
-		}
-		return -1;
-	}
-
-}
-
-
-namespace show
-{
-
-
-
-	//transfer it to validation namespace
-
-	short valid_choice(short from=1,short to=6)
-	{
-
-		short choice;
-		cin >> choice;
-		while (cin.fail())
-		{
-			cin.clear();
-			cin.ignore(500,'\n');
-			cout << "Enter it correctly:";
-			cin >> choice;
-		}
-		while (choice<1 || choice>6)
-		{
-			cout << "Enter it correctly:";
-			cin.ignore(500, '\n');
-			cin >> choice;
-		}
-		return choice;
-
-	}
-
-
-
-
-	///enum userchoice { showClientsList = 1, addNewClient, deleteClient, upgradeClientInfo,
-	//findClient, Exit };
-	userchoice mainmenu()
-	{
-		string sep(50,'*');
-		string tab(3,'\t');
-		short choice;
-
-
-
-		cout << "\n\n" << tab << " Main Menu \n" <<sep<<endl;
-
-		cout << "[ 1 ] Show cleint list.\n";
-		cout << "[ 2 ] Add new client.\n";
-		cout << "[ 3 ] Delete client.\n";
-		cout << "[ 4 ] Upgrade client info.\n";
-		cout << "[ 5 ] Find client.\n";
-		cout << "[ 6 ] Exit.\n";
-		cout << sep << "\nYour Choice :";
-		choice = valid_choice();
-
-		return userchoice(choice);
-	}
-	
 		do {
-			cout << "Choose the ID of user you want to delete : ";  cin >> UserId;
-			index = handle_clients::find_client(UserId, users);
+			
+			index = handle_clients::find_client( users,UserId);
 
 			cout << "Are you sure you want to delete this user ( yes or no ) ? : ";
 			string answer = validation::YesAndNo_Validation();
@@ -276,12 +171,16 @@ namespace show
 			again = validation::YesAndNo_Validation();
 
 		} while (again == "yes");
-		
+
 		return UsersAfterDelete;
 
 	}
-	
 }
+
+
+
+
+
 
 
 
