@@ -3,6 +3,7 @@
 #include<string>
 #include<vector>
 #include<fstream>
+#include<iomanip>
 
 using namespace std;
 
@@ -14,11 +15,79 @@ struct stUserData
 	string name;
 	string id;
 	string pincode;
-	unsigned int phone;
+	string phone;
 	int balance;
 };
 
-namespace users_informations
+namespace validation
+{
+	string LowerTheWord(string& word)
+	{
+		for (char& letter : word)
+		{
+			letter=tolower(letter);
+		}
+		return word;
+	}
+
+	string YesAndNo_Validation()
+	{
+		bool pass = 0;
+		string answer;  bool ThereIsDigit = 0;
+		do 
+		{
+			cin >> answer;
+
+			for (char& letter : answer)
+			{
+				if (isdigit(letter))
+				{
+					cout << "Wrong input , please write you answer correctly : ";
+					ThereIsDigit = 1;
+					break;
+				}
+			}
+			if (ThereIsDigit) continue;
+
+			answer = validation::LowerTheWord(answer);
+			if (answer != "yes" && answer != "no")
+			{
+				cout << "Wrong input , please write you answer correctly : ";
+			}
+			else 
+			{
+				pass = 1;
+			}
+		} while (!pass);
+
+		return answer;
+		
+	}
+}
+
+namespace handle_clients
+{
+
+	short find_client(string id, vector<stUserData>& usersvec)
+	{
+		for (int i = 0; i < usersvec.size();i++)
+		{
+			if (usersvec[i].id == id)
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+
+
+
+
+
+}
+
+
+namespace users_information
 {
 	void ReadDataFromFile(vector<stUserData>&users)
 	{
@@ -37,7 +106,6 @@ namespace users_informations
 		}
 
 	}
-
 
 	stUserData string_2_struct(string dataline,string separator=" ")
 	{
@@ -59,6 +127,7 @@ namespace users_informations
 
 		return st_data;
 	}
+
 	vector<stUserData> read_data(string filename)
 	{
 		fstream myfile;
@@ -68,7 +137,6 @@ namespace users_informations
 			cout << "the file doesn't open !!!";
 			
 		}
-
 		vector<stUserData> vecinfo;
 		string lineofData;
 		while (getline(myfile >> ws, lineofData))
@@ -81,10 +149,33 @@ namespace users_informations
 
 	}
 
-}
+	void PrintUsers(vector<stUserData>& users)
+	{
+		cout << "\n\t\t\tAll users in the program\n";
+		cout << "\t\t      ============================";
 
-namespace handle_clients
-{
+		cout << left << setw(16) << "\n\nNAME " << " | "
+			<< left << setw(15) << "ID" << " | "
+			<< left << setw(15) << "BALANCE" << " | "
+			<< left << setw(15) << "PINCODE" << " | "
+			<< left << setw(15) << "PHONE" << " | \n";
+		cout << "****************************************************************************************\n";
+
+
+		for (int i = 0;i < users.size();i++)
+		{
+			cout << left << setw(15) << users[i].name << "| ";
+			cout << left << setw(15) << users[i].id << " | ";
+			cout << left << setw(15) << users[i].balance << " | ";
+			cout << left << setw(15) << users[i].pincode << " | ";
+			cout << left << setw(15) << users[i].phone << " | ";
+			cout << "\n________________________________________________________________________________________\n\n";
+		}
+	}
+
+	vector<stUserData> DeleteUser(vector<stUserData>& users)
+	{
+		string UserId; short index = 0; vector<stUserData>UsersAfterDelete; string again;
 
 	short find_client(string id,vector<stUserData>& usersvec)
 	{
@@ -157,9 +248,44 @@ namespace show
 		return userchoice(choice);
 	}
 	
+		do {
+			cout << "Choose the ID of user you want to delete : ";  cin >> UserId;
+			index = handle_clients::find_client(UserId, users);
 
+			cout << "Are you sure you want to delete this user ( yes or no ) ? : ";
+			string answer = validation::YesAndNo_Validation();
 
+			if (answer == "yes")
+			{
+				for (int k = 0;k < users.size();k++)
+				{
+					if (index != k)
+					{
+						UsersAfterDelete.push_back(users[k]);
+					}
+				}
+				cout << "The User Has Been Deleted Successfully .";
+			}
+			else
+			{
+				continue;
+			}
 
+			cout << "\nDo You Want To Delete another user (yes or no ) ? : ";
 
+			again = validation::YesAndNo_Validation();
 
+		} while (again == "yes");
+		
+		return UsersAfterDelete;
+
+	}
+	
 }
+
+
+
+
+
+
+
