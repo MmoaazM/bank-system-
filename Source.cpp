@@ -1,14 +1,24 @@
 #include<iostream>
-#include"Header.h"
+#include"header2.h"
+#include"mutual.h"
 using namespace std;
 
 int main()
 {
-	vector<stUserData>all_users;
+	vector<stUserData>all_users; userchoice choice;
 
 	users_information::ReadDataFromFile(all_users);
-	show::mainmenu();
 
-	all_users=users_information::UpdateUsers(all_users);
+	do
+	{	
+	    choice = show::mainmenu();
+		show::OrgainseProgram(choice, all_users);
+		
+		
+	}while (choice != userchoice::Exit);
+
+	users_information::save2file(all_users);
+	
+	
 	return 0;
 }

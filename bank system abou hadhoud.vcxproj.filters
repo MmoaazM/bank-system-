@@ -26,6 +26,9 @@
     <ClInclude Include="header2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="mutual.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="users_data.txt" />
