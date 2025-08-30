@@ -15,13 +15,17 @@ namespace validation
 
 	string YesAndNo_Validation()
 	{
+		/*cin.ignore('\n');*/
 		bool pass = 0;
 		string answer;  bool ThereIsDigit = 0;
 		do 
-		{
-			
+		{   
+			if (answer == "")
+			{
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			}
 			getline(cin, answer);
-
+			
 			for (char& letter : answer)
 			{
 				if (isdigit(letter)||isspace(letter)||ispunct(letter))
@@ -142,10 +146,13 @@ namespace users_information
 
 	vector<stUserData> DeleteUser(vector<stUserData>& users)
 	{
-		string UserId; short index = 0; vector<stUserData>UsersAfterDelete; string again;
+		 short index = 0; vector<stUserData>UsersAfterDelete; string again;
+
+		 cout << "\t\t\tDeleting Users From Bank .\n\n";
+          
 		do {
 			
-			index = handle_clients::find_client( users,UserId);
+			index = handle_clients::find_client( users);
 
 			cout << "Are you sure you want to delete this user ( yes or no ) ? : ";
 			string answer = validation::YesAndNo_Validation();
@@ -174,6 +181,48 @@ namespace users_information
 
 		return UsersAfterDelete;
 
+	}
+
+	vector<stUserData> UpdateUsers(vector<stUserData>& users)
+	{
+		short index; string again; string answer; stUserData newdata;
+		cout << "\t\t\tUpdating Users In Bank . \n\n";
+		do
+		{
+			index=handle_clients::find_client(users);
+			
+			cout << "Are You Want To Change this User's info ( yes or no ) : ";
+			answer=validation::YesAndNo_Validation();
+
+			if (answer == "yes")
+			{
+				string agree;
+
+				    cout << "Enter the new information of the user .\n";
+
+				    cout << "Name : "; cin >> newdata.name;
+				    cout << "ID : "; cin >> newdata.id;
+					cout << "Balance : "; cin >> newdata.balance;
+					cout << "Pincode : "; cin >> newdata.pincode;
+					cout << "Phone : "; cin >> newdata.phone;
+					
+					cout << "Are You Sure You Want To change the information ? ( yes or no ) : ";
+					agree = validation::YesAndNo_Validation();
+					if (agree == "yes")
+					{
+						users[index] = newdata;
+						cout << "Data Has Been Updated Successfully :) \n\n";
+					}
+			}
+			else
+			{
+				continue;
+			}
+			cout << "Do You Want To Change another user information ( yes or no ) : ";
+			again = validation::YesAndNo_Validation();
+
+		} while (again == "yes");
+		return users;
 	}
 }
 

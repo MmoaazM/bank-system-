@@ -7,14 +7,8 @@ int main()
 	vector<stUserData>all_users;
 
 	users_information::ReadDataFromFile(all_users);
-	validation::YesAndNo_Validation();
-
-	
-
-
 	show::mainmenu();
 
-
-	handle_clients::find_client(all_users);
+	all_users=users_information::UpdateUsers(all_users);
 	return 0;
 }
