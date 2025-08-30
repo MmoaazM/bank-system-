@@ -78,6 +78,28 @@ namespace users_information
 
 	}
 
+	void save2file( vector<stUserData>& users, string filename = "users_data.h",string separator = " ")
+	{
+
+		fstream myfile;
+		myfile.open(filename, ios::out | ios::app);
+		if (!myfile.is_open())
+		{
+			cout << "the file doesn't open !!!";
+		}
+		for (stUserData& client : users)
+		{
+			myfile << client.name << separator;
+			myfile << client.id << separator;
+			myfile << client.balance << separator;
+			myfile << client.phone << separator;
+			myfile << client.pincode << separator;
+		}
+
+		myfile.close();
+
+	}
+
 	stUserData string_2_struct(string dataline,string separator=" ")
 	{
 		stUserData st_data;
@@ -99,15 +121,17 @@ namespace users_information
 		return st_data;
 	}
 
-	vector<stUserData> read_data(string filename)
+	vector<stUserData> read_data(string filename="users_data.h")
 	{
+
 		fstream myfile;
-		myfile.open(filename,ios::out|ios::app);
+		myfile.open(filename,ios::in);
+
 		if (!myfile.is_open())
 		{
 			cout << "the file doesn't open !!!";
-			
 		}
+
 		vector<stUserData> vecinfo;
 		string lineofData;
 		while (getline(myfile >> ws, lineofData))

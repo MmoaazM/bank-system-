@@ -57,8 +57,19 @@ namespace handle_clients
 		return index;
 	}
 
+	void add_client(vector<stUserData>& usersvec)
+	{
+		cout << "Please Enter New client information :-\n";
+		stUserData newacc;
+		cout << "NAME : "; cin >> newacc.name;
+		cout << "ID : "; cin >> newacc.id;
+		cout << "BALANCE :"; cin >> newacc.balance;
+		cout << "PINCODE :"; cin >> newacc.pincode;
+		cout << "PHONE : "; cin >> newacc.phone;
 
+		usersvec.push_back(newacc);
 
+	}
 
 
 
