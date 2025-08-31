@@ -12,9 +12,7 @@ int main()
  	do
 	{	
 	    choice = show::mainmenu();
-		show::OrgainseProgram(choice, all_users);
-		
-		transactions::TransactionsMainMenu(all_users);
+		show::OrganiseProgram(choice, all_users);
 
 	}while (choice != userchoice::Exit);
 

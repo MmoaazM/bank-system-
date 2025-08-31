@@ -134,6 +134,122 @@ namespace handle_clients
 
 }
 
+
+
+
+namespace transactions
+{
+	void PrintTransactionTable(vector<stUserData>& users)
+	{
+		system("cls");
+
+	    cout << "\n\t\t=======================================\n";
+		cout << "\t\t\tTransactions Table\n";
+		cout << "\t\t=======================================\n\n\n";
+
+		cout << "|" << left << setw(15) << "NAME"
+			<< "|" << left << setw(15) << "ID"
+			<< "|" << left << setw(15) << "BALANCE";
+
+		cout << "\n*********************************************************\n";
+
+		int TotalBalance = 0;
+		for (stUserData& user : users)
+		{
+			cout << "|" << left << setw(15) << user.name
+				<< "|" << left << setw(15) << user.id
+				<< "|" << left << setw(15) << user.balance << endl;
+			TotalBalance += user.balance;
+
+			cout << "________________________________________________________" << endl;
+		}
+		cout << "Total Balance Of all Users : " << TotalBalance << endl;
+
+		cout << "Press Any Key to continue\n";
+		system("pause>0 ");
+		system("cls");
+
+	}
+
+
+
+	void deposit_withdraw(vector<stUserData>& usersvec, enoperation operation)
+	{
+		system("cls");
+		short client_index = handle_clients::find_client(usersvec);
+		double amount = 0;
+		cout << "Enter the amount :";
+		amount = validation::valid_choice(0, 9999999999999);
+		if (operation == enoperation::depo)
+		{
+			usersvec[client_index].balance += amount;
+		}
+		else if (operation == enoperation::withdr)
+		{
+			while (usersvec[client_index].balance < amount)
+			{
+				cout << "\n you don't have enough money!!\n you have" <<
+					usersvec[client_index].balance;
+			}
+			usersvec[client_index].balance += amount * -1;
+		}
+	}
+
+
+
+	void OrganiseTransactions(entransactions choice, vector<stUserData>&usersvec)
+	{
+		switch (choice)
+		{
+		case entransactions::deposit:
+			deposit_withdraw(usersvec, depo);
+
+			break;
+
+		case entransactions::withdraw:
+			deposit_withdraw(usersvec, withdr);
+
+			break;
+
+		case entransactions::show_balances:
+			PrintTransactionTable(usersvec);
+			break;
+
+		case entransactions::backto_mainmenu:
+			break;
+
+		}
+	}
+
+	void TransactionsMainMenu(vector<stUserData>usersvec)
+	{
+		while (true)
+		{
+			system("cls");
+			short choice;
+			cout << "\t===========================================\n";
+			cout << "\t\ttransactions menu\n";
+			cout << "\t===========================================\n\n";
+
+			cout << "choose your option :-\n";
+			cout << "[ 1 ] deposit\n[ 2 ] withdraw\n[ 3 ] show all users balance\n[ 4 ] back to main menu\n";
+			cout << "the choice --> ";
+			choice = validation::valid_choice(1, 4);
+
+			entransactions UserChoice = (entransactions)choice;
+
+			if (UserChoice == entransactions::backto_mainmenu) 
+			{
+				system("cls");
+				break;
+			}
+
+			OrganiseTransactions(UserChoice, usersvec);
+		}
+
+	}
+}
+
 namespace users_information
 {
 	void ReadDataFromFile(vector<stUserData>& users)
@@ -243,6 +359,9 @@ namespace users_information
 			cout << left << setw(15) << users[i].phone << " | ";
 			cout << "\n________________________________________________________________________________________\n\n";
 		}
+		cout << "Press Any Key to continue\n";
+		system("pause>0 ");
+		system("cls");
 	}
 
 	vector<stUserData> DeleteUser(vector<stUserData>& users)
@@ -278,9 +397,9 @@ namespace users_information
 			cout << "\nDo You Want To Delete another user (yes or no ) ? : ";
 
 			again = validation::YesAndNo_Validation();
-
+			system("cls");
 		} while (again == "yes");
-
+		system("cls");
 		return UsersAfterDelete;
 
 	}
@@ -309,7 +428,7 @@ namespace users_information
 				cout << "Phone : "; cin >> newdata.phone;
 
 				cout << "Are You Sure You Want To change the information ? ( yes or no ) : ";
-				agree = validation::YesAndNo_Validation();
+				agree = validation::YesAndNo_Validation(1);
 				if (agree == "yes")
 				{
 					users[index] = newdata;
@@ -322,8 +441,9 @@ namespace users_information
 			}
 			cout << "Do You Want To Change another user information ( yes or no ) : ";
 			again = validation::YesAndNo_Validation();
-
+			system("cls");
 		} while (again == "yes");
+		system("cls");
 		return users;
 	}
 }
@@ -331,7 +451,7 @@ namespace users_information
 namespace show
 {
 
-	void OrgainseProgram(userchoice choice, vector<stUserData>& users)
+	void OrganiseProgram(userchoice choice, vector<stUserData>& users)
 	{
 		if (choice == userchoice::addNewClient)
 		{
@@ -359,6 +479,11 @@ namespace show
 			cout << "Thanks For Using Bank Program \n\t\t have a nice day :)\n";
 			system("pause");
 		}
+		else if (choice == userchoice::trans)
+		{
+			transactions::TransactionsMainMenu(users);
+
+		}
 		
 	}
 
@@ -380,106 +505,12 @@ namespace show
 		cout << "[ 6 ] Transactions.\n";
 		cout << "[ 7 ] Exit.\n";
 		cout << sep << "\nYour Choice :";
-		choice = validation::valid_choice();
-
+		choice = validation::valid_choice(1,7);
+		system("cls");
 		return userchoice(choice);
 	}
 
 }
 
-namespace transactions
-{
-	void PrintTransactionTable(vector<stUserData>& users)
-	{
-		cout << "\t\t=======================================\n";
-		cout << "\t\t\tTransactions Table\n";
-		cout << "\t\t=======================================\n\n\n";
 
-		cout << "|" << left << setw(15) << "NAME"
-			 << "|" << left << setw(15) << "ID"
-			 << "|" << left << setw(15) << "BALANCE";
-
-		cout << "\n*********************************************************\n";
-
-		int TotalBalance = 0;
-		for (stUserData& user : users)
-		{
-			cout << "|" << left << setw(15) << user.name
-				 << "|" << left << setw(15) << user.id
-				 << "|" << left << setw(15) << user.balance<<endl;
-			TotalBalance += user.balance;
-
-			cout << "________________________________________________________" << endl;
-		}
-		cout << "Total Balance Of all Users : " << TotalBalance<<endl;
-	}
-
-	void OrganiseTransactions(entransactions choice, vector<stUserData>& users)
-
-	void deposit_withdraw(vector<stUserData>&usersvec,enoperation operation)
-	{
-		system("cls");
-		short client_index=handle_clients::find_client(usersvec);
-		double amount = 0;
-		cout << "Enter the amount :";
-		amount = validation::valid_choice(0, 9999999999999);
-		if (operation==enoperation::depo)
-		{
-			usersvec[client_index].balance += amount;
-		}
-		else if (operation==enoperation::withdr)
-		{
-			usersvec[client_index].balance += amount * -1;
-		}
-	}
-
-
-
-	void OrganiseTransactions(entransactions choice,vector<stUserData>usersvec)
-	{
-		switch (choice)
-		{
-		case entransactions::deposit:
-			deposit_withdraw(usersvec,depo);
-
-			break;
-
-		case entransactions::withdraw:
-			deposit_withdraw(usersvec, withdr);
-
-			break;
-
-		case entransactions::show_balances:
-			PrintTransactionTable(users);
-			break;
-
-		case entransactions::backto_mainmenu:
-			break;
-		
-		}
-	}
-
-	void TransactionsMainMenu(vector<stUserData>usersvec)
-	{
-		while (true)
-		{
-			short choice;
-			cout << "\t===========================================\n";
-			cout << "\t\ttransactions menu\n";
-			cout << "\t===========================================\n\n";
-
-			cout << "choose your option :-\n";
-			cout << "[ 1 ] deposit\n[ 2 ] withdraw\n[ 3 ] show all users balance\n[ 4 ] back to main menu\n";
-			cout << "the choice --> "; 
-			choice=validation::valid_choice(1, 4);
-
-			entransactions UserChoice = (entransactions)choice;
-
-			if (UserChoice == entransactions::backto_mainmenu) break;
-
-			OrganiseTransactions(UserChoice,usersvec);
-		}
-	
-	}
-}
 
