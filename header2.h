@@ -387,22 +387,51 @@ namespace show
 
 namespace transactions
 {
-	void OrganiseTransactions(entransactions choice)
+	void PrintTransactionTable(vector<stUserData>& users)
+	{
+		cout << "\t\t=======================================\n";
+		cout << "\t\t\tTransactions Table\n";
+		cout << "\t\t=======================================\n\n\n";
+
+		cout << "|" << left << setw(15) << "NAME"
+			 << "|" << left << setw(15) << "ID"
+			 << "|" << left << setw(15) << "BALANCE";
+
+		cout << "\n*********************************************************\n";
+
+		int TotalBalance = 0;
+		for (stUserData& user : users)
+		{
+			cout << "|" << left << setw(15) << user.name
+				 << "|" << left << setw(15) << user.id
+				 << "|" << left << setw(15) << user.balance<<endl;
+			TotalBalance += user.balance;
+
+			cout << "________________________________________________________" << endl;
+		}
+		cout << "Total Balance Of all Users : " << TotalBalance<<endl;
+	}
+
+	void OrganiseTransactions(entransactions choice, vector<stUserData>& users)
 	{
 		switch (choice)
 		{
 		case entransactions::deposit:
 			break;
+
 		case entransactions::withdraw:
 			break;
+
 		case entransactions::show_balances:
+			PrintTransactionTable(users);
 			break;
+
 		case entransactions::backto_mainmenu:
 			break;
 		}
 	}
 
-	void TransactionsMainMenu()
+	void TransactionsMainMenu(vector<stUserData>& users)
 	{
 		while (true)
 		{
@@ -419,7 +448,7 @@ namespace transactions
 
 			if (UserChoice == entransactions::backto_mainmenu) break;
 
-			OrganiseTransactions(UserChoice);
+			OrganiseTransactions(UserChoice,users);
 		}
 	
 	}
