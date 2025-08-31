@@ -58,10 +58,10 @@ namespace validation
 
 	}
 
-	short valid_choice(short from = 1, short to = 6)
+	double valid_choice(double from = 1, double to = 6)
 	{
 
-		short choice;
+		double choice;
 		cin >> choice;
 		while (cin.fail())
 		{
@@ -359,6 +359,7 @@ namespace show
 			cout << "Thanks For Using Bank Program \n\t\t have a nice day :)\n";
 			system("pause");
 		}
+		
 	}
 
 	userchoice mainmenu()
@@ -376,7 +377,8 @@ namespace show
 		cout << "[ 3 ] Delete client.\n";
 		cout << "[ 4 ] Upgrade client info.\n";
 		cout << "[ 5 ] Find client.\n";
-		cout << "[ 6 ] Exit.\n";
+		cout << "[ 6 ] Transactions.\n";
+		cout << "[ 7 ] Exit.\n";
 		cout << sep << "\nYour Choice :";
 		choice = validation::valid_choice();
 
@@ -387,22 +389,47 @@ namespace show
 
 namespace transactions
 {
-	void OrganiseTransactions(entransactions choice)
+
+	void deposit_withdraw(vector<stUserData>&usersvec,enoperation operation)
+	{
+		system("cls");
+		short client_index=handle_clients::find_client(usersvec);
+		double amount = 0;
+		cout << "Enter the amount :";
+		amount = validation::valid_choice(0, 9999999999999);
+		if (operation==enoperation::depo)
+		{
+			usersvec[client_index].balance += amount;
+		}
+		else if (operation==enoperation::withdr)
+		{
+			usersvec[client_index].balance += amount * -1;
+		}
+	}
+
+
+
+	void OrganiseTransactions(entransactions choice,vector<stUserData>usersvec)
 	{
 		switch (choice)
 		{
 		case entransactions::deposit:
+			deposit_withdraw(usersvec,depo);
+
 			break;
 		case entransactions::withdraw:
+			deposit_withdraw(usersvec, withdr);
+
 			break;
 		case entransactions::show_balances:
+
+
 			break;
-		case entransactions::backto_mainmenu:
-			break;
+		
 		}
 	}
 
-	void TransactionsMainMenu()
+	void TransactionsMainMenu(vector<stUserData>usersvec)
 	{
 		while (true)
 		{
@@ -413,13 +440,14 @@ namespace transactions
 
 			cout << "choose your option :-\n";
 			cout << "[ 1 ] deposit\n[ 2 ] withdraw\n[ 3 ] show all users balance\n[ 4 ] back to main menu\n";
-			cout << "the choice --> "; cin >> choice; validation::valid_choice(1, 4);
+			cout << "the choice --> "; 
+			choice=validation::valid_choice(1, 4);
 
 			entransactions UserChoice = (entransactions)choice;
 
 			if (UserChoice == entransactions::backto_mainmenu) break;
 
-			OrganiseTransactions(UserChoice);
+			OrganiseTransactions(UserChoice,usersvec);
 		}
 	
 	}

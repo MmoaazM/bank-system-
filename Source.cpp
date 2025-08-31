@@ -14,7 +14,7 @@ int main()
 	    choice = show::mainmenu();
 		show::OrgainseProgram(choice, all_users);
 		
-		transactions::TransactionsMainMenu();
+		transactions::TransactionsMainMenu(all_users);
 
 	}while (choice != userchoice::Exit);
 
