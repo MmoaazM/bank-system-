@@ -9,16 +9,16 @@ int main()
 
 	users_information::ReadDataFromFile(all_users);
 
-	do
+ 	do
 	{	
 	    choice = show::mainmenu();
 		show::OrgainseProgram(choice, all_users);
 		
-		
+		transactions::TransactionsMainMenu();
+
 	}while (choice != userchoice::Exit);
 
 	users_information::save2file(all_users);
-	
 	
 	return 0;
 }

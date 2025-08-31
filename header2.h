@@ -57,6 +57,28 @@ namespace validation
 		return answer;
 
 	}
+
+	short valid_choice(short from = 1, short to = 6)
+	{
+
+		short choice;
+		cin >> choice;
+		while (cin.fail())
+		{
+			cin.clear();
+			cin.ignore(500, '\n');
+			cout << "Enter it correctly:";
+			cin >> choice;
+		}
+		while (choice < from || choice > to)
+		{
+			cout << "Enter it correctly:";
+			cin.ignore(500, '\n');
+			cin >> choice;
+		}
+		return choice;
+
+	}
 }
 
 namespace handle_clients
@@ -309,33 +331,6 @@ namespace users_information
 namespace show
 {
 
-
-
-	//transfer it to validation namespace
-
-	short valid_choice(short from = 1, short to = 6)
-	{
-
-		short choice;
-		cin >> choice;
-		while (cin.fail())
-		{
-			cin.clear();
-			cin.ignore(500, '\n');
-			cout << "Enter it correctly:";
-			cin >> choice;
-		}
-		while (choice < 1 || choice>6)
-		{
-			cout << "Enter it correctly:";
-			cin.ignore(500, '\n');
-			cin >> choice;
-		}
-		return choice;
-
-	}
-
-
 	void OrgainseProgram(userchoice choice, vector<stUserData>& users)
 	{
 		if (choice == userchoice::addNewClient)
@@ -366,11 +361,6 @@ namespace show
 		}
 	}
 
-
-	
-
-	///enum userchoice { showClientsList = 1, addNewClient, deleteClient, upgradeClientInfo,
-	//findClient, Exit };
 	userchoice mainmenu()
 	{
 		string sep(50, '*');
@@ -388,13 +378,50 @@ namespace show
 		cout << "[ 5 ] Find client.\n";
 		cout << "[ 6 ] Exit.\n";
 		cout << sep << "\nYour Choice :";
-		choice = valid_choice();
+		choice = validation::valid_choice();
 
 		return userchoice(choice);
 	}
 
-
-
 }
 
+namespace transactions
+{
+	void OrganiseTransactions(entransactions choice)
+	{
+		switch (choice)
+		{
+		case entransactions::deposit:
+			break;
+		case entransactions::withdraw:
+			break;
+		case entransactions::show_balances:
+			break;
+		case entransactions::backto_mainmenu:
+			break;
+		}
+	}
+
+	void TransactionsMainMenu()
+	{
+		while (true)
+		{
+			short choice;
+			cout << "\t===========================================\n";
+			cout << "\t\ttransactions menu\n";
+			cout << "\t===========================================\n\n";
+
+			cout << "choose your option :-\n";
+			cout << "[ 1 ] deposit\n[ 2 ] withdraw\n[ 3 ] show all users balance\n[ 4 ] back to main menu\n";
+			cout << "the choice --> "; cin >> choice; validation::valid_choice(1, 4);
+
+			entransactions UserChoice = (entransactions)choice;
+
+			if (UserChoice == entransactions::backto_mainmenu) break;
+
+			OrganiseTransactions(UserChoice);
+		}
+	
+	}
+}
 
