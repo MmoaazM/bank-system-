@@ -4,7 +4,28 @@
 
 namespace validation
 {
-	void login(vector <stUserData> users)
+	bool ValidForUser(userchoice choice, stUserData& user) /// make it ?!!
+	{
+		short Choice = pow( 2 , choice - 1);
+
+		return (Choice & user.permissions);
+	}
+
+	bool IsExist(vector<stUserData>&users,string name,string ID)
+	{
+		for (int i = 0;i < users.size();i++)
+		{
+			if (name == users[i].name && ID == users[i].id)
+			{
+				return 1;
+			}
+		}
+		return 0;
+	}
+
+
+
+	short login(vector <stUserData> users)
 	{
 		cout << "*************************************\n";
 		cout << "\t     LOGIN PAGE";
@@ -21,7 +42,7 @@ namespace validation
 				{
 					cout << "\n\nLogin In successfully\nPress any key to continue to the program";
 					system("pause>0");
-					return;
+					return i;
 				}
 			}
 
@@ -109,6 +130,7 @@ namespace validation
 
 namespace handle_clients
 {
+
 
 	short find_client(vector<stUserData>& usersvec, string id = "")
 	{
@@ -650,7 +672,7 @@ namespace show
 			system("pause");
 
 			system("cls");
-			validation::login(users);
+			IndexOfUser=validation::login(users);
 			system("cls");
 		}
 		else if (choice == userchoice::trans)

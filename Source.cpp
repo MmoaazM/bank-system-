@@ -5,21 +5,36 @@ using namespace std;
 
 int main()
 {
+	
+
 	vector<stUserData>all_users; userchoice choice;
 
 	users_information::ReadDataFromFile(all_users);
 
-	validation::login(all_users);
+	IndexOfUser = validation::login(all_users);
+
 	system("cls");
 
  	do
 	{	
 	    choice = show::mainmenu();
-		show::OrganiseProgram(choice, all_users);
+
+		if (validation::ValidForUser(choice, all_users[IndexOfUser]))
+			show::OrganiseProgram(choice, all_users);
+		else
+		{
+			cout << "--------------------------------------------------------------------------" << endl;
+			cout << "\t\tYOU ARE DENIED TO REACH THIS OPTION !!!!!\n";
+			cout << "--------------------------------------------------------------------------" << endl;
+			cout << "\nContact with you admin to get the permission";
+
+			system("pause>0");
+			system("cls");
+		}
+			
+
 
 	}while (1);
-
-	//users_information::save2file(all_users);
 	
 	return 0;
 }
