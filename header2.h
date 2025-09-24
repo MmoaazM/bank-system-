@@ -4,7 +4,14 @@
 
 namespace validation
 {
-	bool IsExist(vector<stUserData> users,string name,string ID)
+	bool ValidForUser(userchoice choice, stUserData& user) /// make it ?!!
+	{
+		short Choice = pow( 2 , choice - 1);
+
+		return (Choice & user.permissions);
+	}
+
+	bool IsExist(vector<stUserData>&users,string name,string ID)
 	{
 		for (int i = 0;i < users.size();i++)
 		{
@@ -16,10 +23,7 @@ namespace validation
 		return 0;
 	}
 
-	bool ValidForUser(userchoice choice) /// make it ?!!
-	{
 
-	}
 
 	short login(vector <stUserData> users)
 	{
@@ -127,6 +131,7 @@ namespace validation
 namespace handle_clients
 {
 
+
 	short find_client(vector<stUserData>& usersvec, string id = "")
 	{
 		if (id == "")
@@ -176,8 +181,6 @@ namespace handle_clients
 		usersvec.push_back(newacc);
 
 	}
-
-
 
 }
 
