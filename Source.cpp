@@ -17,9 +17,9 @@ int main()
 	    choice = show::mainmenu();
 		show::OrganiseProgram(choice, all_users);
 
-	}while (choice != userchoice::Exit);
+	}while (1);
 
-	users_information::save2file(all_users);
+	//users_information::save2file(all_users);
 	
 	return 0;
 }

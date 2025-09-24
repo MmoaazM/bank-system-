@@ -151,6 +151,9 @@ namespace handle_clients
 		cout << "BALANCE :"; cin >> newacc.balance;
 		cout << "PINCODE :"; cin >> newacc.pincode;
 		cout << "PHONE : "; cin >> newacc.phone;
+		cout << "PASSWORD : ";cin >> newacc.password;
+
+		system("cls");
 
 		usersvec.push_back(newacc);
 
@@ -532,9 +535,15 @@ namespace show
 		}
 		else if (choice == userchoice::Exit)
 		{
+			users_information::save2file(users);
+
 			system("cls");
 			cout << "Thanks For Using Bank Program \n\t\t have a nice day :)\n";
 			system("pause");
+
+			system("cls");
+			validation::login(users);
+			system("cls");
 		}
 		else if (choice == userchoice::trans)
 		{
@@ -560,7 +569,7 @@ namespace show
 		cout << "[ 4 ] Upgrade client info.\n";
 		cout << "[ 5 ] Find client.\n";
 		cout << "[ 6 ] Transactions.\n";
-		cout << "[ 7 ] Exit.\n";
+		cout << "[ 7 ] logout.\n";
 		cout << sep << "\nYour Choice :";
 		choice = validation::valid_choice(1,7);
 		system("cls");
