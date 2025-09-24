@@ -133,30 +133,97 @@ namespace handle_clients
 			}
 		} while (index == -1);
 
-		cout << "NAME : " << usersvec[index].name << endl;
-		cout << "ID : " << usersvec[index].id << "\n";
-		cout << "BALANCE : " << usersvec[index].balance << "\n";
-		cout << "PINCODE : " << usersvec[index].pincode << "\n";
-		cout << "PHONE : " << usersvec[index].phone << "\n";
+		
 
 		return index;
 	}
 
+
+	short calc_permissions()
+	{
+		short res = 0;
+		string ans;
+		cout << "Do you want to give him full access ?\n";
+		ans = validation::YesAndNo_Validation(1);
+		if (ans == "yes")
+		{
+			return -1;
+		}
+		cout << "Do you want to give him access to [ Show Client ] ?\n";
+		ans = validation::YesAndNo_Validation(1);
+		if (ans == "yes")
+		{
+			res += pow(2,(short)enpermissions::showClients);
+		}
+		cout << "Do you want to give him access to [ Add Client ] ?\n";
+		ans = validation::YesAndNo_Validation(1);
+		if (ans == "yes")
+		{
+			res += pow(2, (short)enpermissions::addClient);
+		}
+		cout << "Do you want to give him access to [ delete Client ] ?\n";
+		ans = validation::YesAndNo_Validation(1);
+		if (ans == "yes")
+		{
+			res += pow(2, (short)enpermissions::deleteClient);
+		}
+		cout << "Do you want to give him access to [ Upgrade Client ] ?\n";
+		ans = validation::YesAndNo_Validation(1);
+		if (ans == "yes")
+		{
+			res += pow(2, (short)enpermissions::upgradeClient);
+		}
+		cout << "Do you want to give him access to [ Find Client ] ?\n";
+		ans = validation::YesAndNo_Validation(1);
+		if (ans == "yes")
+		{
+			res += pow(2, (short)enpermissions::findClient);
+		}
+		cout << "Do you want to give him access to [ Transactions ] ?\n";
+		ans = validation::YesAndNo_Validation(1);
+		if (ans == "yes")
+		{
+			res += pow(2, (short)enpermissions::transactions);
+		}
+		cout << "Do you want to give him access to [ Manage Users ] ?\n";
+		ans = validation::YesAndNo_Validation(1);
+		if (ans == "yes")
+		{
+			res += pow(2, (short)enpermissions::manageUsers);
+		}
+
+		return res;
+	}
+
+
 	void add_client(vector<stUserData>& usersvec)
 	{
-		cout << "Please Enter New client information :-\n";
-		stUserData newacc;
-		cout << "NAME : "; cin >> newacc.name;
-		cout << "ID : "; cin >> newacc.id;
-		cout << "BALANCE :"; cin >> newacc.balance;
-		cout << "PINCODE :"; cin >> newacc.pincode;
-		cout << "PHONE : "; cin >> newacc.phone;
-		cout << "PASSWORD : ";cin >> newacc.password;
+		string ans ;
 
-		system("cls");
+		do {
+			ans = "yes";
+			cout << "Please Enter New client information :-\n";
+			stUserData newacc;
+			cout << "NAME : "; cin >> newacc.name;
+			cout << "PASSWORD : ";cin >> newacc.password;
+			
+			/// function to check the name and pass don't repeated !!!!!! 
 
-		usersvec.push_back(newacc);
+			cout << "ID : "; cin >> newacc.id;
+			cout << "BALANCE :"; cin >> newacc.balance;
+			cout << "PINCODE :"; cin >> newacc.pincode;
+			cout << "PHONE : "; cin >> newacc.phone;
 
+
+			/// func to calc the permissions.
+
+			usersvec.push_back(newacc);
+			
+			cout << "Do You Want To Add Another User ?(yes/no)";
+			ans = validation::YesAndNo_Validation(1);
+
+			system("cls");
+		} while (ans=="yes");
 	}
 
 
@@ -594,27 +661,7 @@ namespace show
 		
 	}
 
-	userchoice mainmenu()
-	{
-		string sep(50, '*');
-		string tab(3, '\t');
-		short choice;
-
-
-		
-
-		cout << "[ 1 ] Show cleint list.\n";
-		cout << "[ 2 ] Add new client.\n";
-		cout << "[ 3 ] Delete client.\n";
-		cout << "[ 4 ] Upgrade client info.\n";
-		cout << "[ 5 ] Find client.\n";
-		cout << "[ 6 ] Transactions.\n";
-		cout << "[ 7 ] Exit.\n";
-		cout << sep << "\nYour Choice :";
-		choice = validation::valid_choice(1,7);
-		system("cls");
-		return userchoice(choice);
-	}
+	
 }
 
 

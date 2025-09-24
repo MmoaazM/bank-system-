@@ -16,6 +16,9 @@ enum entransactions{deposit=1,withdraw,show_balances,backto_mainmenu};
 
 enum enoperation {depo=1,withdr};
 
+enum enpermissions { showClients,addClient,deleteClient,
+upgradeClient,findClient,transactions,manageUsers};
+
 struct stUserData
 {
 	string name;
