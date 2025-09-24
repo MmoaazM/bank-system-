@@ -4,6 +4,32 @@
 
 namespace validation
 {
+	void login(vector <stUserData> users)
+	{
+		cout << "*************************************\n";
+		cout << "\t     LOGIN PAGE";
+		cout << "\n*************************************\n\n";
+		string name; string password;
+		while (true)
+		{
+			cout << "Enter name : "; cin >> name;
+			cout << "Enter password : "; cin >> password;
+
+			for (int i = 0;i < users.size();i++)
+			{
+				if (name == users[i].name && password == users[i].password)
+				{
+					cout << "\n\nLogin In successfully\nPress any key to continue to the program";
+					system("pause>0");
+					return;
+				}
+			}
+
+			cout << "\nInvalid user data , Enter the data right \n\n";
+		}
+
+	}
+
 	string LowerTheWord(string& word)
 	{
 		for (char& letter : word)
@@ -134,9 +160,6 @@ namespace handle_clients
 
 }
 
-
-
-
 namespace transactions
 {
 	void PrintTransactionTable(vector<stUserData>& users)
@@ -147,18 +170,18 @@ namespace transactions
 		cout << "\t\t\tTransactions Table\n";
 		cout << "\t\t=======================================\n\n\n";
 
-		cout << "|" << left << setw(15) << "NAME"
-			<< "|" << left << setw(15) << "ID"
-			<< "|" << left << setw(15) << "BALANCE";
+		cout << "|" << left << setw(13) << "NAME"
+			<< "|" << left << setw(13) << "ID"
+			<< "|" << left << setw(13) << "BALANCE";
 
 		cout << "\n*********************************************************\n";
 
 		int TotalBalance = 0;
 		for (stUserData& user : users)
 		{
-			cout << "|" << left << setw(15) << user.name
-				<< "|" << left << setw(15) << user.id
-				<< "|" << left << setw(15) << user.balance << endl;
+			cout << "|" << left << setw(13) << user.name
+				<< "|" << left << setw(13) << user.id
+				<< "|" << left << setw(13) << user.balance << endl;
 			TotalBalance += user.balance;
 
 			cout << "________________________________________________________" << endl;
@@ -264,7 +287,7 @@ namespace users_information
 		}
 		while (getline(read_file, All_Data_ofUser))
 		{
-			data >> user.name >> user.id >> user.balance >> user.pincode >> user.phone;
+			data >> user.name >> user.id >> user.balance >> user.pincode >> user.phone>>user.password>>user.permissions;
 			users.push_back(user);
 		}
 
@@ -286,6 +309,8 @@ namespace users_information
 			myfile << client.balance << separator;
 			myfile << client.phone << separator;
 			myfile << client.pincode << separator;
+			myfile << client.password << separator;
+			myfile << client.permissions << separator;
 			myfile << endl;
 		}
 
@@ -342,22 +367,26 @@ namespace users_information
 		cout << "\n\t\t\tAll users in the program\n";
 		cout << "\t\t      ============================";
 
-		cout << left << setw(16) << "\n\nNAME " << " | "
-			<< left << setw(15) << "ID" << " | "
-			<< left << setw(15) << "BALANCE" << " | "
-			<< left << setw(15) << "PINCODE" << " | "
-			<< left << setw(15) << "PHONE" << " | \n";
-		cout << "****************************************************************************************\n";
+		cout << left << setw(14) << "\n\nNAME " << " | "
+			<< left << setw(13) << "ID" << " | "
+			<< left << setw(13) << "BALANCE" << " | "
+			<< left << setw(13) << "PINCODE" << " | "
+			<< left << setw(13) << "PHONE" << " | "
+			<< left << setw(13) << "PASSWORD" << " | "
+			<< left << setw(13) << "PERMISSIONS" << " | \n";
+		cout << "**************************************************************************************************************\n";
 
 
 		for (int i = 0;i < users.size();i++)
 		{
-			cout << left << setw(15) << users[i].name << "| ";
-			cout << left << setw(15) << users[i].id << " | ";
-			cout << left << setw(15) << users[i].balance << " | ";
-			cout << left << setw(15) << users[i].pincode << " | ";
-			cout << left << setw(15) << users[i].phone << " | ";
-			cout << "\n________________________________________________________________________________________\n\n";
+			cout << left << setw(13) << users[i].name << "| ";
+			cout << left << setw(13) << users[i].id << " | ";
+			cout << left << setw(13) << users[i].balance << " | ";
+			cout << left << setw(13) << users[i].pincode << " | ";
+			cout << left << setw(13) << users[i].phone << " | ";
+			cout << left << setw(13) << users[i].password << " | ";
+			cout << left << setw(13) << users[i].permissions << " | ";
+			cout << "\n______________________________________________________________________________________________________________\n\n";
 		}
 		cout << "Press Any Key to continue\n";
 		system("pause>0 ");
@@ -380,18 +409,46 @@ namespace users_information
 
 			if (answer == "yes")
 			{
-				for (int k = 0;k < users.size();k++)
+				if(users[index].name == "admin")
 				{
-					if (index != k)
-					{
-						UsersAfterDelete.push_back(users[k]);
-					}
+					cout << "\nAdmin can't be deleted\n";
+					again = "yes";
+					continue;
 				}
-				cout << "The User Has Been Deleted Successfully .";
+				else
+				{
+					for (int k = 0;k < users.size();k++)
+					{
+						if (index != k)
+						{
+							UsersAfterDelete.push_back(users[k]);
+						}
+					}
+
+					cout << "The User Has Been Deleted Successfully .";
+				}
+				
 			}
 			else
 			{
-				continue;
+				cout << "Do You Want To continue in this page : ";
+				string OkContinue = validation::YesAndNo_Validation();
+
+				if (OkContinue == "yes")
+				{
+					again = "yes";
+					continue;
+				}
+					
+				else
+				{
+					for (int k = 0;k < users.size();k++)
+					{
+							UsersAfterDelete.push_back(users[k]);
+				    }
+					break;
+				}
+					
 			}
 
 			cout << "\nDo You Want To Delete another user (yes or no ) ? : ";

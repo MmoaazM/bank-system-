@@ -9,6 +9,9 @@ int main()
 
 	users_information::ReadDataFromFile(all_users);
 
+	validation::login(all_users);
+	system("cls");
+
  	do
 	{	
 	    choice = show::mainmenu();
