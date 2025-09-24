@@ -9,6 +9,10 @@
 
 using namespace std;
 
+
+short IndexOfUser;
+
+
 enum userchoice { showClientsList = 1, addNewClient,
 	deleteClient, upgradeClientInfo, findClient,trans, Exit };
 

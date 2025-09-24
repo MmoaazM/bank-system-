@@ -4,7 +4,24 @@
 
 namespace validation
 {
-	void login(vector <stUserData> users)
+	bool IsExist(vector<stUserData> users,string name,string ID)
+	{
+		for (int i = 0;i < users.size();i++)
+		{
+			if (name == users[i].name && ID == users[i].id)
+			{
+				return 1;
+			}
+		}
+		return 0;
+	}
+
+	bool ValidForUser(userchoice choice) /// make it ?!!
+	{
+
+	}
+
+	short login(vector <stUserData> users)
 	{
 		cout << "*************************************\n";
 		cout << "\t     LOGIN PAGE";
@@ -21,7 +38,7 @@ namespace validation
 				{
 					cout << "\n\nLogin In successfully\nPress any key to continue to the program";
 					system("pause>0");
-					return;
+					return i;
 				}
 			}
 
@@ -146,6 +163,7 @@ namespace handle_clients
 	{
 		cout << "Please Enter New client information :-\n";
 		stUserData newacc;
+
 		cout << "NAME : "; cin >> newacc.name;
 		cout << "ID : "; cin >> newacc.id;
 		cout << "BALANCE :"; cin >> newacc.balance;
@@ -542,7 +560,7 @@ namespace show
 			system("pause");
 
 			system("cls");
-			validation::login(users);
+			IndexOfUser=validation::login(users);
 			system("cls");
 		}
 		else if (choice == userchoice::trans)
