@@ -151,9 +151,9 @@ namespace handle_clients
 		cout << "BALANCE :"; cin >> newacc.balance;
 		cout << "PINCODE :"; cin >> newacc.pincode;
 		cout << "PHONE : "; cin >> newacc.phone;
-		
+		cout << "PASSWORD : ";cin >> newacc.password;
 
-
+		system("cls");
 
 		usersvec.push_back(newacc);
 
@@ -552,56 +552,68 @@ namespace show
 		return userchoice(choice);
 	}
 
-		void OrganiseProgram(userchoice choice, vector<stUserData>&users)
+	void OrganiseProgram(userchoice choice, vector<stUserData>& users)
+	{
+		if (choice == userchoice::addNewClient)
 		{
-			if (choice == userchoice::addNewClient)
-			{
-				handle_clients::add_client(users);
-			}
-			else if (choice == userchoice::deleteClient)
-			{
-				users = users_information::DeleteUser(users);
-			}
-			else if (choice == userchoice::findClient)
-			{
-				handle_clients::find_client(users);
-			}
-			else if (choice == userchoice::upgradeClientInfo)
-			{
-				users = users_information::UpdateUsers(users);
-			}
-			else if (choice == userchoice::showClientsList)
-			{
-				users_information::PrintUsers(users);
-			}
-			else if (choice == userchoice::Exit)
-			{
-				system("cls");
-				cout << "Thanks For Using Bank Program \n\t\t have a nice day :)\n";
-				system("pause");
-			}
-			else if (choice == userchoice::trans)
-			{
-				transactions::TransactionsMainMenu(users);
-			}
-			else if (choice == userchoice::manageUsers)
-			{
-				while (true)
-				{
-					userchoice choice = manage_users_menu();
-					if (choice == 6)
-					{
-						break;
-					}
-					else
-					{
-						OrganiseProgram(choice, users);
-					}
-				}
-			}
+			handle_clients::add_client(users);
+		}
+		else if (choice == userchoice::deleteClient)
+		{
+			users=users_information::DeleteUser(users);
+		}
+		else if (choice == userchoice::findClient)
+		{
+			handle_clients::find_client(users);
+		}
+		else if (choice == userchoice::upgradeClientInfo)
+		{
+			users=users_information::UpdateUsers(users);
+		}
+		else if (choice == userchoice::showClientsList)
+		{
+			users_information::PrintUsers(users);
+		}
+		else if (choice == userchoice::Exit)
+		{
+			users_information::save2file(users);
+
+			system("cls");
+			cout << "Thanks For Using Bank Program \n\t\t have a nice day :)\n";
+			system("pause");
+
+			system("cls");
+			validation::login(users);
+			system("cls");
+		}
+		else if (choice == userchoice::trans)
+		{
+			transactions::TransactionsMainMenu(users);
+
+		}
+		
+	}
+
+	userchoice mainmenu()
+	{
+		string sep(50, '*');
+		string tab(3, '\t');
+		short choice;
+
 
 		
 
+		cout << "[ 1 ] Show cleint list.\n";
+		cout << "[ 2 ] Add new client.\n";
+		cout << "[ 3 ] Delete client.\n";
+		cout << "[ 4 ] Upgrade client info.\n";
+		cout << "[ 5 ] Find client.\n";
+		cout << "[ 6 ] Transactions.\n";
+		cout << "[ 7 ] Exit.\n";
+		cout << sep << "\nYour Choice :";
+		choice = validation::valid_choice(1,7);
+		system("cls");
+		return userchoice(choice);
 	}
 }
 
