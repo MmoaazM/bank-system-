@@ -130,10 +130,13 @@ namespace validation
 
 namespace handle_clients
 {
-
-
-	short find_client(vector<stUserData>& usersvec, string id = "")
+	short find_client(vector<stUserData>& usersvec, string id = "",bool InATMmode=false)
 	{
+		if (InATMmode == true)
+		{
+			return IndexOfUser;
+		}
+
 		if (id == "")
 		{
 			cout << "Choose the ID of user you want : ";
@@ -186,13 +189,24 @@ namespace handle_clients
 
 namespace transactions
 {
-	void PrintTransactionTable(vector<stUserData>& users)
+	void PrintTransactionTable(vector<stUserData>& users,bool InATM_Mode=false)
 	{
 		system("cls");
 
 	    cout << "\n\t\t=======================================\n";
 		cout << "\t\t\tTransactions Table\n";
 		cout << "\t\t=======================================\n\n\n";
+
+		if (InATM_Mode == true)
+		{
+
+			cout << left << setw(10) << "NAME" << left << setw(10) << "BALANCE"<<endl<<endl;
+
+			cout << left << setw(10) << users[IndexOfUser].name << left << setw(10) << users[IndexOfUser].balance << endl;
+			cout << "\n\nPress Any key to continue";
+			system("pause>0 ");
+			return;
+		}
 
 		cout << "|" << left << setw(13) << "NAME"
 			<< "|" << left << setw(13) << "ID"
@@ -223,7 +237,7 @@ namespace transactions
 	void deposit_withdraw(vector<stUserData>& usersvec, enoperation operation)
 	{
 		system("cls");
-		short client_index = handle_clients::find_client(usersvec);
+		short client_index = handle_clients::find_client(usersvec,"",true);
 		double amount = 0;
 		cout << "Enter the amount :";
 		amount = validation::valid_choice(0, 9999999999999);
@@ -259,7 +273,7 @@ namespace transactions
 			break;
 
 		case entransactions::show_balances:
-			PrintTransactionTable(usersvec);
+			PrintTransactionTable(usersvec,true);
 			break;
 
 		case entransactions::backto_mainmenu:
@@ -268,7 +282,7 @@ namespace transactions
 		}
 	}
 
-	void TransactionsMainMenu(vector<stUserData>usersvec)
+	void TransactionsMainMenu(vector<stUserData>&usersvec)
 	{
 		while (true)
 		{
@@ -279,7 +293,7 @@ namespace transactions
 			cout << "\t===========================================\n\n";
 
 			cout << "choose your option :-\n";
-			cout << "[ 1 ] deposit\n[ 2 ] withdraw\n[ 3 ] show all users balance\n[ 4 ] back to main menu\n";
+			cout << "[ 1 ] deposit\n[ 2 ] withdraw\n[ 3 ] Quick withdraw\n[ 4 ] show user balance\n[ 5 ] back to main menu\n";
 			cout << "the choice --> ";
 			choice = validation::valid_choice(1, 4);
 

@@ -31,8 +31,6 @@ int main()
 			system("pause>0");
 			system("cls");
 		}
-			
-
 
 	}while (1);
 	
