@@ -324,6 +324,8 @@ namespace transactions
 			{
 				cout << "\n you don't have enough money!!\n you have" <<
 					usersvec[client_index].balance;
+				cout << "Enter valid amount of money : ";
+				amount = validation::valid_choice(0, 9999999999999);
 			}
 			usersvec[client_index].balance += amount * -1;
 		}
@@ -340,7 +342,14 @@ namespace transactions
 		}
 		cout << "Enter your choice :-";
 		choice_index= validation::valid_choice(1,10);
-		usersvec[IndexOfUser].balance += choices_toadd[choice_index - 1];
+		while (usersvec[IndexOfUser].balance < choices_toadd[choice_index-1])
+		{
+			cout << "\n you don't have enough money!!\n you have" <<
+				usersvec[IndexOfUser].balance;
+			cout << "\nEnter your choice :-";
+			choice_index = validation::valid_choice(1, 10);
+		}
+		usersvec[IndexOfUser].balance -= choices_toadd[choice_index - 1];
 	}
 	
 
