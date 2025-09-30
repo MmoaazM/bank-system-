@@ -8,14 +8,14 @@ namespace validation
 	{
 		short Choice = pow( 2 , choice - 1);
 
-		return (Choice & user.permissions);
+		return (Choice & (user.permissions+128));
 	}
 
 	bool IsExist(vector<stUserData>&users,string name,string ID)
 	{
 		for (int i = 0;i < users.size();i++)
 		{
-			if (name == users[i].name && ID == users[i].id)
+			if (name == users[i].name || ID == users[i].id)
 			{
 				return 1;
 			}
@@ -158,32 +158,105 @@ namespace handle_clients
 			}
 		} while (index == -1);
 
-		cout << "NAME : " << usersvec[index].name << endl;
-		cout << "ID : " << usersvec[index].id << "\n";
-		cout << "BALANCE : " << usersvec[index].balance << "\n";
-		cout << "PINCODE : " << usersvec[index].pincode << "\n";
-		cout << "PHONE : " << usersvec[index].phone << "\n";
+		
 
 		return index;
 	}
 
+
+	short calc_permissions()
+	{
+		short res = 0;
+		string ans;
+		cout << "Do you want to give him full access ?\n";
+		ans = validation::YesAndNo_Validation(1);
+		if (ans == "yes")
+		{
+			return -1;
+		}
+		cout << "Do you want to give him access to [ Show Client ] ?\n";
+		ans = validation::YesAndNo_Validation();
+		if (ans == "yes")
+		{
+			res += pow(2,(short)enpermissions::showing);
+		}
+		cout << "Do you want to give him access to [ Add Client ] ?\n";
+		ans = validation::YesAndNo_Validation();
+		if (ans == "yes")
+		{
+			res += pow(2, (short)enpermissions::add);
+		}
+		cout << "Do you want to give him access to [ delete Client ] ?\n";
+		ans = validation::YesAndNo_Validation();
+		if (ans == "yes")
+		{
+			res += pow(2, (short)enpermissions::dele);
+		}
+		cout << "Do you want to give him access to [ Upgrade Client ] ?\n";
+		ans = validation::YesAndNo_Validation();
+		if (ans == "yes")
+		{
+			res += pow(2, (short)enpermissions::upgrade);
+		}
+		cout << "Do you want to give him access to [ Find Client ] ?\n";
+		ans = validation::YesAndNo_Validation();
+		if (ans == "yes")
+		{
+			res += pow(2, (short)enpermissions::find);
+		}
+		cout << "Do you want to give him access to [ Transactions ] ?\n";
+		ans = validation::YesAndNo_Validation();
+		if (ans == "yes")
+		{
+			res += pow(2, (short)enpermissions::tran);
+		}
+		cout << "Do you want to give him access to [ Manage Users ] ?\n";
+		ans = validation::YesAndNo_Validation();
+		if (ans == "yes")
+		{
+			res += pow(2, (short)enpermissions::manage);
+		}
+
+		return res;
+	}
+
+
 	void add_client(vector<stUserData>& usersvec)
 	{
-		cout << "Please Enter New client information :-\n";
-		stUserData newacc;
+		string ans ;
 
-		cout << "NAME : "; cin >> newacc.name;
-		cout << "ID : "; cin >> newacc.id;
-		cout << "BALANCE :"; cin >> newacc.balance;
-		cout << "PINCODE :"; cin >> newacc.pincode;
-		cout << "PHONE : "; cin >> newacc.phone;
-		cout << "PASSWORD : ";cin >> newacc.password;
+		do {
+			ans = "yes";
+			cout << "Please Enter New client information :-\n";
+			stUserData newacc;
+			cout << "NAME : "; cin >> newacc.name;
+			cout << "PASSWORD : ";cin >> newacc.password;
+			cout << "ID : "; cin >> newacc.id;
+			if (validation::IsExist(usersvec, newacc.name, newacc.id))
+			{
+				cout << "This name or id exists before!!!\n\n";
+				continue;
+			}
 
-		system("cls");
+			
+			cout << "BALANCE :"; cin >> newacc.balance;
+			cout << "PINCODE :"; cin >> newacc.pincode;
+			cout << "PHONE : "; cin >> newacc.phone;
 
-		usersvec.push_back(newacc);
+			newacc.permissions=calc_permissions();
 
+			usersvec.push_back(newacc);
+			
+			cout << "Do You Want To Add Another User ?(yes/no)";
+			ans = validation::YesAndNo_Validation();
+
+			system("cls");
+		} while (ans=="yes");
 	}
+
+
+	
+
 
 }
 
@@ -256,7 +329,20 @@ namespace transactions
 		}
 	}
 
-
+	void quickWithdr(vector<stUserData>& usersvec)
+	{
+		system("cls");
+		int choices_toadd[10] = {100,200,300,400,500,600,700,800,900,1000};
+		short choice_index=0;
+		for (int i = 0; i < 10; i += 2)
+		{
+			printf("[%d] %d\t\t\t[%d] %d\n", i + 1, choices_toadd[i], i + 2, choices_toadd[i + 1]);
+		}
+		cout << "Enter your choice :-";
+		choice_index= validation::valid_choice(1,10);
+		usersvec[IndexOfUser].balance += choices_toadd[choice_index - 1];
+	}
+	
 
 	void OrganiseTransactions(entransactions choice, vector<stUserData>&usersvec)
 	{
@@ -268,8 +354,13 @@ namespace transactions
 			break;
 
 		case entransactions::withdraw:
+			
 			deposit_withdraw(usersvec, withdr);
+			break;
 
+		case entransactions::quickwithdraw:
+			
+			quickWithdr(usersvec);
 			break;
 
 		case entransactions::show_balances:
@@ -518,12 +609,21 @@ namespace users_information
 
 				cout << "Name : "; cin >> newdata.name;
 				cout << "ID : "; cin >> newdata.id;
+				if (validation::IsExist(users, newdata.name, newdata.id))
+				{
+					cout << "This name or id exists before!!!\n\n";
+					again = "yes";
+					system("pause>0");
+					continue;
+				}
 				cout << "Balance : "; cin >> newdata.balance;
 				cout << "Pincode : "; cin >> newdata.pincode;
 				cout << "Phone : "; cin >> newdata.phone;
 
+				newdata.permissions = handle_clients::calc_permissions();
+
 				cout << "Are You Sure You Want To change the information ? ( yes or no ) : ";
-				agree = validation::YesAndNo_Validation(1);
+				agree = validation::YesAndNo_Validation();
 				if (agree == "yes")
 				{
 					users[index] = newdata;
@@ -545,6 +645,45 @@ namespace users_information
 
 namespace show
 {
+	string sep(50, '*');
+	string tab(3, '\t');
+	short choice;
+
+	userchoice mainmenu()
+	{
+		
+		cout << "\n\n" << tab << " Main Menu \n" << sep << endl;
+
+		cout << "[ 1 ] Show client list.\n";
+		cout << "[ 2 ] Add new client.\n";
+		cout << "[ 3 ] Delete client.\n";
+		cout << "[ 4 ] Upgrade client info.\n";
+		cout << "[ 5 ] Find client.\n";
+		cout << "[ 6 ] Transactions.\n";
+		cout << "[ 7 ] Manage Users.\n";
+		cout << "[ 8 ] Logout.\n";
+		cout << sep << "\nYour Choice :";
+		choice = validation::valid_choice(1,8);
+		system("cls");
+		return userchoice(choice);
+	}
+
+	userchoice manage_users_menu()
+	{
+		cout << "\n\n" << tab << " Manage Users Menu \n" << sep << endl;
+
+		cout << "[ 1 ] Show cleint list.\n";
+		cout << "[ 2 ] Add new client.\n";
+		cout << "[ 3 ] Delete client.\n";
+		cout << "[ 4 ] Upgrade client info.\n";
+		cout << "[ 5 ] Find client.\n";
+		cout << "[ 6 ] Main Menu.\n";
+
+		cout << sep << "\nYour Choice :";
+		choice = validation::valid_choice(1, 6);
+		system("cls");
+		return userchoice(choice);
+	}
 
 	void OrganiseProgram(userchoice choice, vector<stUserData>& users)
 	{
@@ -583,34 +722,8 @@ namespace show
 		else if (choice == userchoice::trans)
 		{
 			transactions::TransactionsMainMenu(users);
-
-		}
-		
-	}
-
-	userchoice mainmenu()
-	{
-		string sep(50, '*');
-		string tab(3, '\t');
-		short choice;
-
-
-
-		cout << "\n\n" << tab << " Main Menu \n" << sep << endl;
-
-		cout << "[ 1 ] Show cleint list.\n";
-		cout << "[ 2 ] Add new client.\n";
-		cout << "[ 3 ] Delete client.\n";
-		cout << "[ 4 ] Upgrade client info.\n";
-		cout << "[ 5 ] Find client.\n";
-		cout << "[ 6 ] Transactions.\n";
-		cout << "[ 7 ] logout.\n";
-		cout << sep << "\nYour Choice :";
-		choice = validation::valid_choice(1,7);
-		system("cls");
-		return userchoice(choice);
-	}
-
+		}	
+	}	
 }
 
 

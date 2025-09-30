@@ -14,11 +14,14 @@ short IndexOfUser;
 
 
 enum userchoice { showClientsList = 1, addNewClient,
-	deleteClient, upgradeClientInfo, findClient,trans, Exit };
+	deleteClient, upgradeClientInfo, findClient,trans, manageUsers, Exit };
 
-enum entransactions{deposit=1,withdraw,show_balances,backto_mainmenu};
+enum entransactions{deposit=1,withdraw,quickwithdraw,show_balances,backto_mainmenu};
 
 enum enoperation {depo=1,withdr};
+
+enum enpermissions { showing,add,dele,
+upgrade,find,tran,manage};
 
 struct stUserData
 {
